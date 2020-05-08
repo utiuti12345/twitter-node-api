@@ -7,21 +7,27 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc:ver": "tsc -v",
     "tsc": "tsc",
-    "ts-node": "ts-node"
+    "ts-node": "ts-node",
+    "dev":"cross-env NODE_ENV=dev npm run ts-node app.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/config": "0.0.36",
     "@types/express": "^4.17.6",
+    "@types/long": "^4.0.1",
     "@types/node": "^13.13.4",
     "@types/swagger-jsdoc": "^3.0.2",
     "@types/swagger-ui-express": "^4.1.2",
     "@types/twitter": "^1.7.0",
+    "cross-env": "^7.0.2",
     "ts-node": "^8.9.1",
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "config": "^3.3.1",
     "express": "^4.17.1",
+    "long": "^4.0.0",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4",
     "twitter": "^1.7.1"
