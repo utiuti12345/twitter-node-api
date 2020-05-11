@@ -1,6 +1,6 @@
 import Twitter from 'twitter';
 import Long from "long";
-import { Follower,UserTimeLine } from '../../../interfaces/repository/userRepository';
+import { Follower,UserTimeLine } from '../../../interfaces/repository/tweetRepository';
 
 export class ApiHandler {
   private client:Twitter;
@@ -66,5 +66,23 @@ export class ApiHandler {
       }
     }
     return userTimeLines;
+  }
+
+  async execTweet(text:string):Promise<UserTimeLine>{
+    try{
+      console.log(text);
+      const data = await this.client.post('statuses/update', {status:text});
+      console.log(data);
+      return {
+        id:data.id,
+        text:data.text,
+        created:data.created_at,
+        screenName:"",
+        medias:[]
+      }
+    }catch(e){
+      console.log(e);
+      throw e; 
+    }
   }
 }

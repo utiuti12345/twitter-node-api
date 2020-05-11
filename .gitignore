@@ -105,3 +105,6 @@ dist
 
 #dev file 
 /config/dev.json
+
+# DS_Store
+*DS_Store

@@ -15,7 +15,7 @@ export interface UserTimeLine {
   medias:string[]
 }
 
-export class UserRepository{
+export class TweetRepository{
   private apiHandler: ApiHandler;
 
   public constructor(_apiHandler: ApiHandler) {
@@ -50,5 +50,15 @@ export class UserRepository{
           })
         });
     return urls;
+  }
+
+  public async execTweet(tweet:Tweet):Promise<Tweet>{
+    try{
+      console.log(tweet.getText());
+      const res = await this.apiHandler.execTweet(tweet.getText());
+      return new Tweet("",res.screenName,res.text,res.created,[]);
+    }catch(e){
+      throw e;
+    }
   }
 }

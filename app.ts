@@ -3,16 +3,16 @@ import config from 'config';
 import {Express} from './infra/express/server'
 
 import {ApiHandler} from './infra/api/handler/apiHandler';
-import {UserRepository} from './interfaces/repository/userRepository';
-import {UserService} from './usecase/service/userService';
-import {UserController} from './interfaces/controllers/userController';
+import {TweetRepository} from './interfaces/repository/tweetRepository';
+import {TweetService} from './usecase/service/userService';
+import {TweetController} from './interfaces/controllers/tweetController';
 
 const tweetConfig = config.get("tweetConfig");
 const apiHandler = new ApiHandler(tweetConfig);
-const userRepository = new UserRepository(apiHandler);
-const userServive = new UserService(userRepository);
+const tweetRepository = new TweetRepository(apiHandler);
+const tweetServive = new TweetService(tweetRepository);
 const controllers = {
-  user: new UserController(userServive)
+  tweet: new TweetController(tweetServive)
 }
 
 const express = new Express(3000,controllers);

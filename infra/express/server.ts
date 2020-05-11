@@ -1,9 +1,9 @@
 import express from 'express';
-import { UserController } from '../../interfaces/controllers/userController';
+import { TweetController } from '../../interfaces/controllers/tweetController';
 import { ExpressServerRouter } from './routers/router';
 
 export interface Controllers {
-  user: UserController
+  tweet: TweetController
 }
 
 export class Express{
