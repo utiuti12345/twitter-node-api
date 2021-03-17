@@ -30,7 +30,7 @@ export class ExpressServerRouter {
       console.log("Hello",req.query.name);
       res.send("Hello"+req.query.name);
     });
-    
+
     router.get("/followers",async (req:express.Request,res:express.Response) => {
       const resCon = await controllers.tweet.getAllFollowers();
       res.send(resCon);
@@ -48,11 +48,17 @@ export class ExpressServerRouter {
       res.send(resCon);
     });
 
+    router.post("/retweet",async (req:express.Request,res:express.Response) => {
+      console.log(req.body.id);
+      const id = req.body.id;
+      const resCon = await controllers.tweet.postReTweet({id});
+      res.send(resCon);
+    });
+
     router.post("/tweet",async (req:express.Request,res:express.Response) => {
-      //const body = JSON.parse(req.body);
       console.log(req.body.text);
-      const text = req.body.text
-      const resCon = await controllers.tweet.execTweet({text});
+      const text = req.body.text;
+      const resCon = await controllers.tweet.postTweet({text});
       res.send(resCon);
     });
 

@@ -1,39 +1,61 @@
-import { TweetService,FollowersUsecaseResponse,TweetServiceResponse,ImageUrlResponse,TweetsImageResponse } from '../../usecase/service/userService';
+import {
+  FollowersUsecaseResponse,
+  ImageUrlResponse,
+  TweetServiceResponse,
+  TweetsImageResponse,
+  UserService
+} from '../../usecase/service/userService';
+import {TweetService} from '../../usecase/service/tweetService';
 
 export type FollowersControllerResponse = FollowersUsecaseResponse
 export type TweetsImageConstrollerResponse = TweetsImageResponse
 export type ImageConstrollerResponse = ImageUrlResponse
 
-export type TweetControllerRequest = {
+export type TweetControllerReTweetRequest = {
+  id:string,
+}
+
+export type TweetControllerTweetRequest = {
   text:string,
 }
 
 export type TweetControlerResponse = TweetServiceResponse;
 
 export class TweetController {
+  private userService:UserService;
   private tweetService:TweetService;
-  constructor(_tweetService:TweetService){
+  constructor(_userService:UserService,_tweetService:TweetService){
+    this.userService = _userService;
     this.tweetService = _tweetService;
   }
 
   public async getAllFollowers():Promise<FollowersControllerResponse>{
-    const res = await this.tweetService.getAllFollowers();
+    const res = await this.userService.getAllFollowers();
     console.log(res);
     return res;
   }
 
   public async getTweetsImage(screenName:string){
-    return await this.tweetService.getTweetsImage(screenName);
+    return await this.userService.getTweetsImage(screenName);
   }
 
   public async getImages(screenName:string){
-    return await this.tweetService.getAllImages(screenName);
+    return await this.userService.getAllImages(screenName);
   }
 
-  public async execTweet(request:TweetControllerRequest):Promise<TweetControlerResponse>{
+  public async postReTweet(request:TweetControllerReTweetRequest):Promise<TweetControlerResponse>{
+    try{
+      console.log(request.id);
+      return await this.tweetService.postReTweet(request);
+    }catch(e){
+      throw e;
+    }
+  }
+
+  public async postTweet(request:TweetControllerTweetRequest):Promise<TweetControlerResponse>{
     try{
       console.log(request.text);
-      return await this.tweetService.execTweet(request);
+      return await this.tweetService.postTweet(request);
     }catch(e){
       throw e;
     }
