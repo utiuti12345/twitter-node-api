@@ -1,20 +1,6 @@
 import {TweetRepository, UserTimeLine} from '../../interfaces/repository/tweetRepository';
 import {Tweet} from '../../domain/tweet';
-import {
-    TweetControllerReTweetRequest, TweetControllerSearchTweetRequest,
-    TweetControllerTweetRequest
-} from '../../interfaces/controllers/tweetController';
 import TweetClient from "../../infra/tweet/twitterClient";
-
-export type TweetServiceReTweetRequest = TweetControllerReTweetRequest;
-
-export type TweetServiceTweetRequest = TweetControllerTweetRequest;
-
-export type TweetServiceSearchTweetRequest = TweetControllerSearchTweetRequest;
-
-export type TweetServiceResponse = {
-    tweet: Tweet | null
-}
 
 export class TweetService {
     private tweetClient: TweetClient;
@@ -23,41 +9,57 @@ export class TweetService {
         this.tweetClient = tweetClient;
     }
 
-    public async postReTweet(req: TweetServiceReTweetRequest): Promise<TweetServiceResponse> {
+    public async postReTweet(id: string): Promise<Tweet> {
         try {
-            console.log(req.id);
-            const tweet = await this.tweetClient.postReTweet(req.id);
-            return {
-                tweet: tweet,
-            };
+            console.log(id);
+            const tweet = await this.tweetClient.postReTweet(id);
+            return new Tweet(
+                tweet.statuses.id,
+                tweet.statuses.name,
+                tweet.statuses.screenName,
+                tweet.statuses.text,
+                tweet.statuses.created,
+                []);
         } catch (e) {
             throw e;
         }
     }
 
-    public async postTweet(req: TweetServiceTweetRequest): Promise<TweetServiceResponse> {
+    public async postTweet(text: string): Promise<Tweet> {
         try {
-            console.log(req.text);
-            const tweet = await this.tweetClient.postTweet(req.text);
-            return {
-                tweet: tweet
-            };
+            console.log(text);
+            const tweet = await this.tweetClient.postTweet(text);
+            return new Tweet(
+                tweet.statuses.id,
+                tweet.statuses.name,
+                tweet.statuses.screenName,
+                tweet.statuses.text,
+                tweet.statuses.created,
+                []);
         } catch (e) {
             console.log(e);
             throw e;
         }
     }
 
-    public async searchTweet(req: TweetServiceSearchTweetRequest): Promise<TweetServiceResponse> {
+    public async searchTweet(query: string): Promise<Tweet> {
         try {
-            console.log(req.query);
-            const tweet = await this.tweetClient.searchTweet(req.query);
-            return {
-                tweet: tweet
-            };
+            console.log(query);
+            const tweet = await this.tweetClient.searchTweet(query);
+            return new Tweet(
+                tweet.statuses.id,
+                tweet.statuses.name,
+                tweet.statuses.screenName,
+                tweet.statuses.text,
+                tweet.statuses.created,
+                []);
         } catch (e) {
             console.log(e);
             throw e;
         }
+    }
+
+    public async participatePrizeCompetition(req: string) {
+
     }
 }

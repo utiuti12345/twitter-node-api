@@ -1,6 +1,7 @@
 import express, {NextFunction} from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Controllers } from '../../../infra/express/server';
+import encode from "../../../lib/encoding";
 
 export class ExpressServerRouter {
   private app:express.Express;
@@ -63,8 +64,7 @@ export class ExpressServerRouter {
     });
 
     router.get("/search",async (req:express.Request,res:express.Response) => {
-      res.header('Content-Type', 'text/plain;charset=utf-8');
-      console.log(req.query.q);
+      console.log(req.query.q.toString());
       const params = {
         query:req.query.q.toString()
       };

@@ -2,7 +2,7 @@ import Twitter from "twitter";
 import {Tweet} from "../../domain/tweet";
 
 export default class TwitterClient {
-    private limit:number;
+    private readonly limit:number;
     private client: Twitter;
 
     constructor(config: any) {
@@ -16,7 +16,7 @@ export default class TwitterClient {
         this.limit = config.search_limit;
     }
 
-    public async postReTweet(id: string): Promise<Tweet> {
+    public async postReTweet(id: string): Promise<TwitterReTweetResponse> {
         try{
             console.log(id);
             const params = {
@@ -24,14 +24,14 @@ export default class TwitterClient {
             };
             const data = await this.client.post('statuses/retweet/',params);
             console.log(data);
-            return new Tweet(data.id, data.user.name, data.user.screen_name, data.text, data.created_at, [])
+            return {statuses:data};
         }catch(e){
             console.log(e);
             throw e;
         }
     }
 
-    public async postTweet(text: string): Promise<Tweet> {
+    public async postTweet(text: string): Promise<TwitterTweetResponse> {
         try{
             console.log(text);
             const status = {
@@ -39,14 +39,14 @@ export default class TwitterClient {
             };
             const data = await this.client.post('statuses/update', status);
             console.log(data);
-            return new Tweet(data.id, data.user.name, data.user.screen_name, data.text, data.created_at, [])
+            return {statuses:data};
         }catch(e){
             console.log(e);
             throw e;
         }
     }
 
-    public async searchTweet(query:string): Promise<Tweet> {
+    public async searchTweet(query:string): Promise<TwitterSearchResponse> {
         try{
             const params = {
                 q:query,
@@ -55,7 +55,7 @@ export default class TwitterClient {
             const data = await this.client.get('search/tweets', params);
             console.log(data);
 
-            return new Tweet("", "", "", "", "", []);
+            return {statuses:data.statuses};
         }catch (e) {
             console.log(e);
             throw e;
