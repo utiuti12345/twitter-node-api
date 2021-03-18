@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {NextFunction} from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Controllers } from '../../../infra/express/server';
 
@@ -21,7 +21,7 @@ export class ExpressServerRouter {
       apis: ['./router.ts'],
     });
 
-    this.app.get("/api-docs.json",(req:express.Request,res:express.Response) => {
+    router.get("/api-docs.json",(req:express.Request,res:express.Response) => {
       res.setHeader('Content-Type','application/json');
       res.send(swaggerSpec);
     });
@@ -30,7 +30,7 @@ export class ExpressServerRouter {
       console.log("Hello",req.query.name);
       res.send("Hello"+req.query.name);
     });
-    
+
     router.get("/followers",async (req:express.Request,res:express.Response) => {
       const resCon = await controllers.tweet.getAllFollowers();
       res.send(resCon);
@@ -48,12 +48,33 @@ export class ExpressServerRouter {
       res.send(resCon);
     });
 
-    router.post("/tweet",async (req:express.Request,res:express.Response) => {
-      //const body = JSON.parse(req.body);
-      console.log(req.body.text);
-      const text = req.body.text
-      const resCon = await controllers.tweet.execTweet({text});
+    router.post("/retweet",async (req:express.Request,res:express.Response) => {
+      console.log(req.body.id);
+      const id = req.body.id;
+      const resCon = await controllers.tweet.postReTweet({id});
       res.send(resCon);
+    });
+
+    router.post("/tweet",async (req:express.Request,res:express.Response) => {
+      console.log(req.body.text);
+      const text = req.body.text;
+      const response = await controllers.tweet.postTweet({text});
+      res.send(response);
+    });
+
+    router.get("/search",async (req:express.Request,res:express.Response) => {
+      res.header('Content-Type', 'text/plain;charset=utf-8');
+      console.log(req.query.q);
+      const params = {
+        query:req.query.q.toString()
+      };
+      const response = await controllers.tweet.searchTweet(params);
+      res.send(response);
+    });
+
+    router.use((error:Error, req:express.Request, res:express.Response, next:NextFunction) => {
+      console.error(error.stack);
+      res.status(500).send(error.message);
     });
 
     this.app.use(router);

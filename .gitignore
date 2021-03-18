@@ -103,8 +103,13 @@ dist
 # TernJS port file
 .tern-port
 
-#dev file 
+#dev file
 /config/dev.json
+/config/prod.json
 
 # DS_Store
 *DS_Store
+
+./dist
+
+.idea

@@ -6,9 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc:ver": "tsc -v",
-    "tsc": "tsc",
+    "tsc": "tsc && cp -r ./config ./dist",
     "ts-node": "ts-node",
-    "dev":"cross-env NODE_ENV=dev npm run ts-node app.ts"
+    "dev":"cross-env NODE_ENV=dev npm run ts-node app.ts",
+    "prod":"cross-env NODE_ENV=dev tsc && node ./dist/index.js"
   },
   "author": "",
   "license": "ISC",

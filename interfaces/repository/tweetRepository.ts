@@ -34,7 +34,7 @@ export class TweetRepository{
     userTimeLine
         .filter((medias) => medias.medias.length > 0)
         .map((tweet) => {
-          tweets.push(new Tweet("",screenName,tweet.text,tweet.created,tweet.medias));
+          tweets.push(new Tweet("","",screenName,tweet.text,tweet.created,tweet.medias));
         });
     return tweets;
   }
@@ -56,7 +56,7 @@ export class TweetRepository{
     try{
       console.log(tweet.getText());
       const res = await this.apiHandler.execTweet(tweet.getText());
-      return new Tweet("",res.screenName,res.text,res.created,[]);
+      return new Tweet("","",res.screenName,res.text,res.created,[]);
     }catch(e){
       throw e;
     }

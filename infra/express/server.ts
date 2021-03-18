@@ -7,8 +7,8 @@ export interface Controllers {
 }
 
 export class Express{
-  private app:express.Express = express()
-  private port: number
+  private app:express.Express = express();
+  private readonly port: number;
 
   constructor(port:any, controllers: Controllers) {
     this.port = port;
@@ -29,7 +29,7 @@ export class Express{
   }
 
   run(){
-    this.app.listen(this.port)
+    this.app.listen(this.port);
     console.debug('express server running...')
   }
 }
