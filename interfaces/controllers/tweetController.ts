@@ -1,11 +1,10 @@
 import {
   FollowersUsecaseResponse,
   ImageUrlResponse,
-  TweetServiceResponse,
   TweetsImageResponse,
   UserService
 } from '../../usecase/service/userService';
-import {TweetService} from '../../usecase/service/tweetService';
+import {TweetService,TweetServiceResponse} from '../../usecase/service/tweetService';
 
 export type FollowersControllerResponse = FollowersUsecaseResponse
 export type TweetsImageConstrollerResponse = TweetsImageResponse
@@ -19,7 +18,11 @@ export type TweetControllerTweetRequest = {
   text:string,
 }
 
-export type TweetControlerResponse = TweetServiceResponse;
+export type TweetControllerSearchTweetRequest = {
+  query:string
+}
+
+export type TweetControllerResponse = TweetServiceResponse;
 
 export class TweetController {
   private userService:UserService;
@@ -43,7 +46,7 @@ export class TweetController {
     return await this.userService.getAllImages(screenName);
   }
 
-  public async postReTweet(request:TweetControllerReTweetRequest):Promise<TweetControlerResponse>{
+  public async postReTweet(request:TweetControllerReTweetRequest):Promise<TweetControllerResponse>{
     try{
       console.log(request.id);
       return await this.tweetService.postReTweet(request);
@@ -52,10 +55,19 @@ export class TweetController {
     }
   }
 
-  public async postTweet(request:TweetControllerTweetRequest):Promise<TweetControlerResponse>{
+  public async postTweet(request:TweetControllerTweetRequest):Promise<TweetServiceResponse>{
     try{
       console.log(request.text);
       return await this.tweetService.postTweet(request);
+    }catch(e){
+      throw e;
+    }
+  }
+
+  public async searchTweet(request:TweetControllerSearchTweetRequest):Promise<TweetServiceResponse>{
+    try{
+      console.log(request.query);
+      return await this.tweetService.searchTweet(request);
     }catch(e){
       throw e;
     }

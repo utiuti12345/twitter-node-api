@@ -64,13 +64,4 @@ export class UserService {
     const urls = await this.tweetRepository.getAllImages(screenName);
     return {urls};
   }
-
-  public async execTweet(req: TweetServiceRequest): Promise<TweetServiceResponse> {
-    try {
-      //const tweet = await this.tweetRepository.execTweet(new Tweet("", "", req.text, "", []));
-      return {tweet:null};
-    } catch (e) {
-      throw e;
-    }
-  }
 }
