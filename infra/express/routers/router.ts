@@ -49,31 +49,47 @@ export class ExpressServerRouter {
     //   res.send(resCon);
     // });
 
-    router.post("/retweet",async (req:express.Request,res:express.Response) => {
-      console.log(req.body.id);
-      const id = req.body.id;
-      const resCon = await controllers.tweet.postReTweet({id});
-      res.send(resCon);
+    router.post("/retweet",async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.body.id);
+        const id = req.body.id;
+        const resCon = await controllers.tweet.postReTweet({id});
+        res.send(resCon);
+      }catch (e) {
+        next(e);
+      }
+
     });
 
-    router.post("/tweet",async (req:express.Request,res:express.Response) => {
-      console.log(req.body.text);
-      const text = req.body.text;
-      const response = await controllers.tweet.postTweet({text});
-      res.send(response);
+    router.post("/tweet",async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.body.text);
+        const text = req.body.text;
+        const response = await controllers.tweet.postTweet({text});
+        res.send(response);
+      }catch (e) {
+        next(e);
+      }
     });
 
-    router.get("/search",async (req:express.Request,res:express.Response) => {
-      console.log(req.query.q.toString());
-      const params = {
-        query:req.query.q.toString()
-      };
-      const response = await controllers.tweet.searchTweet(params);
-      res.send(response);
+    router.get("/search",async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.query.q.toString());
+        const params = {
+          query:req.query.q.toString()
+        };
+        const response = await controllers.tweet.searchTweet(params);
+        res.send(response);
+      }catch (e) {
+        next(e);
+      }
     });
 
     router.use((error:Error, req:express.Request, res:express.Response, next:NextFunction) => {
       console.error(error.stack);
+      if(Array.isArray(error)){
+        res.status(500).send(error[0].message);
+      }
       res.status(500).send(error.message);
     });
 

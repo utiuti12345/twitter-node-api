@@ -24,7 +24,7 @@ export class TweetRepository{
 
   public async getAllFollowers():Promise<User[]>{
     const res = await this.apiHandler.findFollowers();
-    const followers = res.map((i) => new User(i.userId,i.screenName));
+    const followers = res.map((i) => new User(i.userId, i.screenName));
     return followers;
   }
 

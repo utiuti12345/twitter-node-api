@@ -1,6 +1,11 @@
 import Twitter from "twitter";
 import {Tweet} from "../../domain/tweet";
 import {Follower, UserTimeLine} from "../../interfaces/repository/tweetRepository";
+import {
+    TwitterFollowerResponse,
+    TwitterReTweetResponse,
+    TwitterTweetResponse, TwitterUserResponse
+} from "../tweet/twitterResponse";
 import Long from "long";
 
 export default class TwitterClient {
@@ -18,15 +23,38 @@ export default class TwitterClient {
         this.limit = config.search_limit;
     }
 
-    public async postReTweet(id: string): Promise<TwitterReTweetResponse> {
+    public async postReTweet(id: string): Promise<TwitterTweetResponse> {
         try{
             console.log(id);
             const params = {
-                id:id,
+                id: id
             };
-            const data = await this.client.post('statuses/retweet/',params);
-            console.log(data);
-            return {statuses:data};
+            const tweet = await this.client.post('statuses/retweet',params);
+            console.log(tweet);
+            return {
+                id:tweet.id,
+                id_str:tweet.id_str,
+                text:tweet.text,
+                user:{
+                    id:tweet.user?.id,
+                    id_str:tweet.user?.id_str,
+                    name:tweet.user?.name,
+                    screen_name:tweet.user?.screen_name,
+                    location:tweet.user?.location,
+                    url:tweet.user?.url,
+                    description:tweet.user?.description,
+                    followers_count:tweet.user?.followers_count,
+                    friends_count:tweet.user?.friends_count,
+                    listed_count:tweet.user?.listed_count,
+                    favourites_count:tweet.user?.favourites_count,
+                    created_at:tweet.user?.created_at,
+                    profile_image_url_https:tweet.user?.profile_image_url_https,
+                },
+                favorite_count:tweet.favorite_count,
+                retweet_count:tweet.retweet_count,
+                favorited:tweet.favorited,
+                retweeted:tweet.retweeted
+            };
         }catch(e){
             console.log(e);
             throw e;
@@ -39,25 +67,107 @@ export default class TwitterClient {
             const status = {
                 status:text,
             };
-            const data = await this.client.post('statuses/update', status);
-            console.log(data);
-            return {statuses:data};
+            const tweet = await this.client.post('statuses/update', status);
+            console.log(tweet);
+            return {
+                id:tweet.id,
+                id_str:tweet.id_str,
+                text:tweet.text,
+                user:{
+                    id:tweet.user?.id,
+                    id_str:tweet.user?.id_str,
+                    name:tweet.user?.name,
+                    screen_name:tweet.user?.screen_name,
+                    location:tweet.user?.location,
+                    url:tweet.user?.url,
+                    description:tweet.user?.description,
+                    followers_count:tweet.user?.followers_count,
+                    friends_count:tweet.user?.friends_count,
+                    listed_count:tweet.user?.listed_count,
+                    favourites_count:tweet.user?.favourites_count,
+                    created_at:tweet.user?.created_at,
+                    profile_image_url_https:tweet.user?.profile_image_url_https,
+                },
+                favorite_count:tweet.favorite_count,
+                retweet_count:tweet.retweet_count,
+                favorited:tweet.favorited,
+                retweeted:tweet.retweeted
+            };
         }catch(e){
             console.log(e);
             throw e;
         }
     }
 
-    public async searchTweet(query:string): Promise<TwitterSearchResponse> {
+    public async searchTweet(query:string): Promise<TwitterTweetResponse[]> {
         try{
             const params = {
                 q:query,
                 count:this.limit,
             };
-            const data = await this.client.get('search/tweets', params);
-            console.log(data);
+            const response = await this.client.get('search/tweets', params);
+            console.log(response);
 
-            return {statuses:data.statuses};
+            let twitterSearchResponse:TwitterTweetResponse[] = [];
+            const tweets:TwitterTweetResponse[] = response.statuses;
+            tweets.map(tweet => {
+                console.log(tweet);
+                twitterSearchResponse.push({
+                    id:tweet.id,
+                    id_str:tweet.id_str,
+                    text:tweet.text,
+                    user:{
+                        id:tweet.user?.id,
+                        id_str:tweet.user?.id_str,
+                        name:tweet.user?.name,
+                        screen_name:tweet.user?.screen_name,
+                        location:tweet.user?.location,
+                        url:tweet.user?.url,
+                        description:tweet.user?.description,
+                        followers_count:tweet.user?.followers_count,
+                        friends_count:tweet.user?.friends_count,
+                        listed_count:tweet.user?.listed_count,
+                        favourites_count:tweet.user?.favourites_count,
+                        created_at:tweet.user?.created_at,
+                        profile_image_url_https:tweet.user?.profile_image_url_https,
+                    },
+                    favorite_count:tweet.favorite_count,
+                    retweet_count:tweet.retweet_count,
+                    favorited:tweet.favorited,
+                    retweeted:tweet.retweeted,
+                })
+            });
+
+            return twitterSearchResponse;
+        }catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
+
+    public async followUser(screenName:string):Promise<TwitterUserResponse>{
+        try {
+            const params = {
+                screen_name:screenName
+            };
+            const user = await this.client.post('friendships/create',params);
+            console.log(user);
+
+            return {
+                id:user?.id,
+                id_str:user?.id_str,
+                name:user?.name,
+                screen_name:user?.screen_name,
+                location:user?.location,
+                url:user?.url,
+                description:user?.description,
+                followers_count:user?.followers_count,
+                friends_count:user?.friends_count,
+                listed_count:user?.listed_count,
+                favourites_count:user?.favourites_count,
+                created_at:user?.created_at,
+                profile_image_url_https:user?.profile_image_url_https,
+            };
         }catch (e) {
             console.log(e);
             throw e;
