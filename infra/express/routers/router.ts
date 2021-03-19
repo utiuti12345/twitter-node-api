@@ -32,22 +32,22 @@ export class ExpressServerRouter {
       res.send("Hello"+req.query.name);
     });
 
-    router.get("/followers",async (req:express.Request,res:express.Response) => {
-      const resCon = await controllers.tweet.getAllFollowers();
-      res.send(resCon);
-    });
-
-    router.get("/tweetsImage",async (req:express.Request,res:express.Response) => {
-      console.log(req.query.name);
-      const resCon = await controllers.tweet.getTweetsImage(req.query.name.toString());
-      res.send(resCon);
-    });
-
-    router.get("/media",async (req:express.Request,res:express.Response) => {
-      console.log(req.query.name);
-      const resCon = await controllers.tweet.getImages(req.query.name.toString());
-      res.send(resCon);
-    });
+    // router.get("/followers",async (req:express.Request,res:express.Response) => {
+    //   const resCon = await controllers.tweet.getAllFollowers();
+    //   res.send(resCon);
+    // });
+    //
+    // router.get("/tweetsImage",async (req:express.Request,res:express.Response) => {
+    //   console.log(req.query.name);
+    //   const resCon = await controllers.tweet.getTweetsImage(req.query.name.toString());
+    //   res.send(resCon);
+    // });
+    //
+    // router.get("/media",async (req:express.Request,res:express.Response) => {
+    //   console.log(req.query.name);
+    //   const resCon = await controllers.tweet.getImages(req.query.name.toString());
+    //   res.send(resCon);
+    // });
 
     router.post("/retweet",async (req:express.Request,res:express.Response) => {
       console.log(req.body.id);
