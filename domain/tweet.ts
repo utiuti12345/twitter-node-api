@@ -1,30 +1,36 @@
 import {User} from "./user";
 
 export class Tweet{
-  private id:string;
-  private user:User;
+  private id:number;
+  private idStr:string;
   private text:string;
-  private created:Date;
-  private mediaUrl:string[];
+  private user:User | null;
+  private favoriteCount:number;
+  private retweetCount:number;
+  private favorited:boolean;
+  private retweeted:boolean;
 
-  constructor(_id:string,_name:string,_screenName:string,_text:string,_created:string,_mediaUrl:string[]){
+  constructor(_id:number,_idStr:string,_text:string,_user:User | null,
+              _favoriteCount:number,_retweetCount:number,_favorited:boolean,_retweeted:boolean){
     this.id = _id;
-    this.user = new User(_name,_screenName);
-    this.created = new Date(_created);
+    this.idStr = _idStr;
     this.text = _text;
-    this.mediaUrl = _mediaUrl;
+    this.user = _user;
+    this.favoriteCount = _favoriteCount;
+    this.retweetCount = _retweetCount;
+    this.favorited = _favorited;
+    this.retweeted = _retweeted;
+  }
+
+  getId(){
+    return this.id;
+  }
+
+  getidStr(){
+    return this.idStr;
   }
 
   getText(){
     return this.text;
-  }
-  getCreated(){
-    const year = this.created.getFullYear();
-    const month = this.created.getMonth() + 1;
-    const day = this.created.getDate();
-    return year + "-" + month + "-" + day;
-  }
-  getMediaUrl(){
-    return this.mediaUrl;
   }
 }

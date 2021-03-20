@@ -8,8 +8,8 @@
     "tsc:ver": "tsc -v",
     "tsc": "tsc && cp -r ./config ./dist",
     "ts-node": "ts-node",
-    "dev":"cross-env NODE_ENV=dev npm run ts-node app.ts",
-    "prod":"cross-env NODE_ENV=dev tsc && node ./dist/index.js"
+    "dev": "cross-env NODE_ENV=dev npm run ts-node app.ts",
+    "prod": "cross-env NODE_ENV=dev tsc && node ./dist/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,7 +27,9 @@
   },
   "dependencies": {
     "config": "^3.3.1",
+    "encoding-japanese": "^1.0.30",
     "express": "^4.17.1",
+    "iconv-lite": "^0.6.2",
     "long": "^4.0.0",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4",

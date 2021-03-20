@@ -1,6 +1,7 @@
 import express, {NextFunction} from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Controllers } from '../../../infra/express/server';
+import encode from "../../../lib/encoding";
 
 export class ExpressServerRouter {
   private app:express.Express;
@@ -31,49 +32,64 @@ export class ExpressServerRouter {
       res.send("Hello"+req.query.name);
     });
 
-    router.get("/followers",async (req:express.Request,res:express.Response) => {
-      const resCon = await controllers.tweet.getAllFollowers();
-      res.send(resCon);
+    // router.get("/followers",async (req:express.Request,res:express.Response) => {
+    //   const resCon = await controllers.tweet.getAllFollowers();
+    //   res.send(resCon);
+    // });
+    //
+    // router.get("/tweetsImage",async (req:express.Request,res:express.Response) => {
+    //   console.log(req.query.name);
+    //   const resCon = await controllers.tweet.getTweetsImage(req.query.name.toString());
+    //   res.send(resCon);
+    // });
+    //
+    // router.get("/media",async (req:express.Request,res:express.Response) => {
+    //   console.log(req.query.name);
+    //   const resCon = await controllers.tweet.getImages(req.query.name.toString());
+    //   res.send(resCon);
+    // });
+
+    router.post("/retweet",async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.body.id);
+        const id = req.body.id;
+        const resCon = await controllers.tweet.postReTweet({id});
+        res.send(resCon);
+      }catch (e) {
+        next(e);
+      }
+
     });
 
-    router.get("/tweetsImage",async (req:express.Request,res:express.Response) => {
-      console.log(req.query.name);
-      const resCon = await controllers.tweet.getTweetsImage(req.query.name.toString());
-      res.send(resCon);
+    router.post("/tweet",async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.body.text);
+        const text = req.body.text;
+        const response = await controllers.tweet.postTweet({text});
+        res.send(response);
+      }catch (e) {
+        next(e);
+      }
     });
 
-    router.get("/media",async (req:express.Request,res:express.Response) => {
-      console.log(req.query.name);
-      const resCon = await controllers.tweet.getImages(req.query.name.toString());
-      res.send(resCon);
-    });
-
-    router.post("/retweet",async (req:express.Request,res:express.Response) => {
-      console.log(req.body.id);
-      const id = req.body.id;
-      const resCon = await controllers.tweet.postReTweet({id});
-      res.send(resCon);
-    });
-
-    router.post("/tweet",async (req:express.Request,res:express.Response) => {
-      console.log(req.body.text);
-      const text = req.body.text;
-      const response = await controllers.tweet.postTweet({text});
-      res.send(response);
-    });
-
-    router.get("/search",async (req:express.Request,res:express.Response) => {
-      res.header('Content-Type', 'text/plain;charset=utf-8');
-      console.log(req.query.q);
-      const params = {
-        query:req.query.q.toString()
-      };
-      const response = await controllers.tweet.searchTweet(params);
-      res.send(response);
+    router.get("/search",async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.query.q.toString());
+        const params = {
+          query:req.query.q.toString()
+        };
+        const response = await controllers.tweet.searchTweet(params);
+        res.send(response);
+      }catch (e) {
+        next(e);
+      }
     });
 
     router.use((error:Error, req:express.Request, res:express.Response, next:NextFunction) => {
       console.error(error.stack);
+      if(Array.isArray(error)){
+        res.status(500).send(error[0].message);
+      }
       res.status(500).send(error.message);
     });
 

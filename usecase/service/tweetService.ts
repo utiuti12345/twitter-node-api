@@ -1,20 +1,6 @@
-import {TweetRepository, UserTimeLine} from '../../interfaces/repository/tweetRepository';
 import {Tweet} from '../../domain/tweet';
-import {
-    TweetControllerReTweetRequest, TweetControllerSearchTweetRequest,
-    TweetControllerTweetRequest
-} from '../../interfaces/controllers/tweetController';
 import TweetClient from "../../infra/tweet/twitterClient";
-
-export type TweetServiceReTweetRequest = TweetControllerReTweetRequest;
-
-export type TweetServiceTweetRequest = TweetControllerTweetRequest;
-
-export type TweetServiceSearchTweetRequest = TweetControllerSearchTweetRequest;
-
-export type TweetServiceResponse = {
-    tweet: Tweet | null
-}
+import {User} from "../../domain/user";
 
 export class TweetService {
     private tweetClient: TweetClient;
@@ -23,38 +9,78 @@ export class TweetService {
         this.tweetClient = tweetClient;
     }
 
-    public async postReTweet(req: TweetServiceReTweetRequest): Promise<TweetServiceResponse> {
+    public async postReTweet(id: string): Promise<Tweet> {
         try {
-            console.log(req.id);
-            const tweet = await this.tweetClient.postReTweet(req.id);
-            return {
-                tweet: tweet,
-            };
+            console.log(id);
+            const tweet = await this.tweetClient.postReTweet(id);
+            const user = new User(
+                tweet.user?.id,tweet.user?.id_str,tweet.user?.name,tweet.user?.screen_name, tweet.user?.location,tweet.user?.url,
+                tweet.user?.description,tweet.user?.followers_count,tweet.user?.friends_count,tweet.user?.listed_count,tweet.user?.favourites_count,
+                tweet.user?.created_at,tweet.user?.profile_image_url_https);
+            return new Tweet(
+                tweet.id,tweet.id_str,tweet.text,user,tweet.favorite_count,tweet.retweet_count,tweet.favorited,tweet.retweeted
+            );
         } catch (e) {
             throw e;
         }
     }
 
-    public async postTweet(req: TweetServiceTweetRequest): Promise<TweetServiceResponse> {
+    public async postTweet(text: string): Promise<Tweet> {
         try {
-            console.log(req.text);
-            const tweet = await this.tweetClient.postTweet(req.text);
-            return {
-                tweet: tweet
-            };
+            console.log(text);
+            const tweet = await this.tweetClient.postTweet(text);
+            const user = new User(
+                tweet.user?.id,tweet.user?.id_str,tweet.user?.name,tweet.user?.screen_name, tweet.user?.location,tweet.user?.url,
+                tweet.user?.description,tweet.user?.followers_count,tweet.user?.friends_count,tweet.user?.listed_count,tweet.user?.favourites_count,
+                tweet.user?.created_at,tweet.user?.profile_image_url_https);
+            return new Tweet(
+                tweet.id,tweet.id_str,tweet.text,user,tweet.favorite_count,tweet.retweet_count,tweet.favorited,tweet.retweeted
+            );
         } catch (e) {
             console.log(e);
             throw e;
         }
     }
 
-    public async searchTweet(req: TweetServiceSearchTweetRequest): Promise<TweetServiceResponse> {
+    public async searchTweet(query: string): Promise<Tweet[]> {
         try {
-            console.log(req.query);
-            const tweet = await this.tweetClient.searchTweet(req.query);
-            return {
-                tweet: tweet
-            };
+            console.log(query);
+
+            const tweetResponses = await this.tweetClient.searchTweet(query);
+            const tweets = tweetResponses.map(tweet => {
+                const user = new User(
+                    tweet.user?.id,tweet.user?.id_str,tweet.user?.name,tweet.user?.screen_name, tweet.user?.location,tweet.user?.url,
+                    tweet.user?.description,tweet.user?.followers_count,tweet.user?.friends_count,tweet.user?.listed_count,tweet.user?.favourites_count,
+                    tweet.user?.created_at,tweet.user?.profile_image_url_https);
+                return new Tweet(
+                    tweet.id,tweet.id_str,tweet.text,user,tweet.favorite_count,tweet.retweet_count,tweet.favorited,tweet.retweeted
+                )
+            });
+            return tweets;
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
+
+    public async participatePrizeCompetition(query: string): Promise<Tweet[]> {
+        try {
+            console.log(query);
+
+            const tweetResponses = await this.tweetClient.searchTweet(query);
+            const tweets = tweetResponses.map(tweet => {
+                const user = new User(
+                    tweet.user?.id,tweet.user?.id_str,tweet.user?.name,tweet.user?.screen_name, tweet.user?.location,tweet.user?.url,
+                    tweet.user?.description,tweet.user?.followers_count,tweet.user?.friends_count,tweet.user?.listed_count,tweet.user?.favourites_count,
+                    tweet.user?.created_at,tweet.user?.profile_image_url_https);
+                return new Tweet(
+                    tweet.id,tweet.id_str,tweet.text,user,tweet.favorite_count,tweet.retweet_count,tweet.favorited,tweet.retweeted
+                )
+            });
+            const retweets = tweets.map(async tweet => {
+                return await this.tweetClient.postReTweet(tweet.getidStr());
+            });
+            return tweets;
         } catch (e) {
             console.log(e);
             throw e;
