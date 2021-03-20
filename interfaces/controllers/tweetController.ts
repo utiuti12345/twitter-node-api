@@ -34,4 +34,12 @@ export class TweetController {
       throw e;
     }
   }
+
+  public async getFriends():Promise<TweetResponse>{
+    try {
+      return await this.tweetService.geyFriends();
+    }catch (e) {
+      throw e;
+    }
+  }
 }

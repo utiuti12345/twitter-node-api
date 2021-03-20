@@ -63,6 +63,21 @@ export class TweetService {
         }
     }
 
+    public async geyFriends():Promise<User[]>{
+        try{
+            const tweetUserResponse = await this.tweetClient.getFriends();
+            return tweetUserResponse.map(user => {
+                return  new User(
+                    user?.id,user?.id_str,user?.name,user?.screen_name, user?.location,user?.url,
+                    user?.description,user?.followers_count,user?.friends_count,user?.listed_count,user?.favourites_count,
+                    user?.created_at,user?.profile_image_url_https);
+            });
+        }catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
+
     public async participatePrizeCompetition(query: string): Promise<Tweet[]> {
         try {
             console.log(query);
