@@ -1,4 +1,6 @@
 import {User} from "./user";
+import {Constants} from "../constants/constants";
+import EXPRESSION_FIND_FOLLOWERS = Constants.EXPRESSION_FIND_FOLLOWERS;
 
 export class Tweet{
   private id:number;
@@ -22,15 +24,27 @@ export class Tweet{
     this.retweeted = _retweeted;
   }
 
-  getId(){
+  public getId(){
     return this.id;
   }
 
-  getidStr(){
+  public getidStr(){
     return this.idStr;
   }
 
-  getText(){
+  public getText(){
     return this.text;
+  }
+
+  public getUser(){
+    return this.user;
+  }
+
+  // 投稿内から正規表現を使ってフォローするユーザーを取り出す
+  public findFollowersByText():string[] | undefined {
+    const followers = this.text.match(EXPRESSION_FIND_FOLLOWERS);
+    return followers?.map(follower => {
+      return follower.replace('@','');
+    })
   }
 }

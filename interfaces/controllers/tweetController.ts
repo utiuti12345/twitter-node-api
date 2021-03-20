@@ -42,4 +42,13 @@ export class TweetController {
       throw e;
     }
   }
+
+  public async participatePrizeCompetition(request:TweetSearchTweetRequest):Promise<TweetResponse>{
+    try {
+      console.log(request.query);
+      return await this.tweetService.participatePrizeCompetition(request.query);
+    }catch (e) {
+      throw e;
+    }
+  }
 }

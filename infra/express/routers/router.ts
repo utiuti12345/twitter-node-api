@@ -95,6 +95,17 @@ export class ExpressServerRouter {
       }
     });
 
+    router.post('/prize',async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.body.query);
+        const query = req.body.query;
+        const response = await controllers.tweet.participatePrizeCompetition({query});
+        res.send(response);
+      }catch (e) {
+        next(e);
+      }
+    });
+
     router.use((error:Error, req:express.Request, res:express.Response, next:NextFunction) => {
       console.error(error.stack);
       if(Array.isArray(error)){

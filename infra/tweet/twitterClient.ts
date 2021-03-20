@@ -176,6 +176,35 @@ export default class TwitterClient {
         }
     }
 
+    public async unfollowUser(screenName:string):Promise<TwitterUserResponse>{
+        try {
+            const params = {
+                screen_name:screenName
+            };
+            const user = await this.client.post('friendships/destroy',params);
+            console.log(user);
+
+            return {
+                id:user?.id,
+                id_str:user?.id_str,
+                name:user?.name,
+                screen_name:user?.screen_name,
+                location:user?.location,
+                url:user?.url,
+                description:user?.description,
+                followers_count:user?.followers_count,
+                friends_count:user?.friends_count,
+                listed_count:user?.listed_count,
+                favourites_count:user?.favourites_count,
+                created_at:user?.created_at,
+                profile_image_url_https:user?.profile_image_url_https,
+            };
+        }catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }
+
     public async getFriends():Promise<TwitterUserResponse[]>{
         try {
             const params = {count: this.friendsCount};

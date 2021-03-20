@@ -82,6 +82,17 @@ export class TweetService {
         try {
             console.log(query);
 
+            const friends = await this.tweetClient.getFriends();
+            // 500人以上フレンドがいる場合は古いものから消していく
+            if (friends.length > 500){
+                friends.map(friend => {
+                    const idStr = friend.id_str;
+                    if (idStr !== undefined){
+                        this.tweetClient.unfollowUser(idStr);
+                    }
+                });
+            }
+
             const tweetResponses = await this.tweetClient.searchTweet(query);
             const tweets = tweetResponses.map(tweet => {
                 const user = new User(
@@ -92,9 +103,20 @@ export class TweetService {
                     tweet.id,tweet.id_str,tweet.text,user,tweet.favorite_count,tweet.retweet_count,tweet.favorited,tweet.retweeted
                 )
             });
+
             const retweets = tweets.map(async tweet => {
+                const followers = tweet.findFollowersByText();
+                const users = followers?.map(async follower => await this.tweetClient.followUser(follower));
+                const user = tweet.getUser();
+                if(user !== null){
+                    const idStr = user.getScreenName();
+                    if(idStr !== undefined){
+                        await this.tweetClient.followUser(idStr);
+                    }
+                }
                 return await this.tweetClient.postReTweet(tweet.getidStr());
             });
+
             return tweets;
         } catch (e) {
             console.log(e);
