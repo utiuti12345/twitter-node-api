@@ -2,6 +2,7 @@ import express, {NextFunction} from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Controllers } from '../../../infra/express/server';
 import encode from "../../../lib/encoding";
+import e from "express";
 
 export class ExpressServerRouter {
   private app:express.Express;
@@ -79,6 +80,26 @@ export class ExpressServerRouter {
           query:req.query.q.toString()
         };
         const response = await controllers.tweet.searchTweet(params);
+        res.send(response);
+      }catch (e) {
+        next(e);
+      }
+    });
+
+    router.get('/friends',async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        const response = await controllers.tweet.getFriends();
+        res.send(response);
+      }catch (e) {
+        next(e);
+      }
+    });
+
+    router.post('/prize',async (req:express.Request,res:express.Response,next:NextFunction) => {
+      try {
+        console.log(req.body.query);
+        const query = req.body.query;
+        const response = await controllers.tweet.participatePrizeCompetition({query});
         res.send(response);
       }catch (e) {
         next(e);
