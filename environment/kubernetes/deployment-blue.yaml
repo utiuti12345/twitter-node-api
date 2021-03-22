@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: twitter-node-api-blue
-          image: utiuti12345/twitter-ndoe-api:1.0.1
+          image: utiuti12345/twitter-ndoe-api:1.0.2
           imagePullPolicy: Always
           ports:
             - name:          http
