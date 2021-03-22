@@ -40,6 +40,10 @@ export class Tweet{
     return this.user;
   }
 
+  public isRetweeted(){
+    return this.retweeted;
+  }
+
   // 投稿内から正規表現を使ってフォローするユーザーを取り出す
   public findFollowersByText():string[] | undefined {
     const followers = this.text.match(EXPRESSION_FIND_FOLLOWERS);
