@@ -22,22 +22,22 @@ export class TweetRepository{
     this.apiHandler = _apiHandler
   }
 
-  public async getAllFollowers():Promise<User[]>{
-    const res = await this.apiHandler.findFollowers();
-    const followers = res.map((i) => new User(i.userId, i.screenName));
-    return followers;
-  }
+  // public async getAllFollowers():Promise<User[]>{
+  //   const res = await this.apiHandler.findFollowers();
+  //   const followers = res.map((i) => new User("", i.screenName));
+  //   return followers;
+  // }
 
-  public async getTweetsImage(screenName:string){
-    const userTimeLine = await this.apiHandler.findUserTimeLine("@"+screenName);
-    var tweets:Tweet[] = [];
-    userTimeLine
-        .filter((medias) => medias.medias.length > 0)
-        .map((tweet) => {
-          tweets.push(new Tweet("","",screenName,tweet.text,tweet.created,tweet.medias));
-        });
-    return tweets;
-  }
+  // public async getTweetsImage(screenName:string){
+  //   const userTimeLine = await this.apiHandler.findUserTimeLine("@"+screenName);
+  //   var tweets:Tweet[] = [];
+  //   userTimeLine
+  //       .filter((medias) => medias.medias.length > 0)
+  //       .map((tweet) => {
+  //         tweets.push(new Tweet("","","",tweet.text,tweet.created,tweet.medias));
+  //       });
+  //   return tweets;
+  // }
 
   public async getAllImages(screenName:string){
     const userTimeLine = await this.apiHandler.findUserTimeLine("@"+screenName);
@@ -52,13 +52,13 @@ export class TweetRepository{
     return urls;
   }
 
-  public async execTweet(tweet:Tweet):Promise<Tweet>{
-    try{
-      console.log(tweet.getText());
-      const res = await this.apiHandler.execTweet(tweet.getText());
-      return new Tweet("","",res.screenName,res.text,res.created,[]);
-    }catch(e){
-      throw e;
-    }
-  }
+  // public async execTweet(tweet:Tweet):Promise<Tweet>{
+  //   try{
+  //     console.log(tweet.getText());
+  //     const res = await this.apiHandler.execTweet(tweet.getText());
+  //     return new Tweet("","",res.screenName,res.text,res.created,[]);
+  //   }catch(e){
+  //     throw e;
+  //   }
+  // }
 }
