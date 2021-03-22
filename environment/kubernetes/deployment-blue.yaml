@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: twitter
+  name: twitter-node-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: twitter-node-api
+  template:
+    metadata:
+      labels:
+        app: twitter-node-api
+        version: blue
+    spec:
+      containers:
+        - name: twitter-node-api-blue
+          image: utiuti12345/twitter-ndoe-api:1.0.1
+          imagePullPolicy: Always
+          ports:
+            - name:          http
+              protocol:      TCP
+              containerPort: 3000

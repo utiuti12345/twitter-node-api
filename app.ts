@@ -2,8 +2,6 @@ import config from 'config';
 
 import {Express} from './infra/express/server'
 
-import {ApiHandler} from './infra/api/handler/apiHandler';
-import {TweetRepository} from './interfaces/repository/tweetRepository';
 import {TweetService} from './usecase/service/tweetService';
 import {TweetController} from './interfaces/controllers/tweetController';
 import TwitterClient from "./infra/tweet/twitterClient";
