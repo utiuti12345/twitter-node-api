@@ -117,7 +117,10 @@ export class TweetService {
                         await this.tweetClient.followUser(idStr);
                     }
                 }
-                return await this.tweetClient.postReTweet(tweet.getidStr());
+                if(!tweet.isRetweeted()){
+                    return await this.tweetClient.postReTweet(tweet.getidStr());
+                }
+                return ;
             });
 
             return tweets;

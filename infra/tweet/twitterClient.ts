@@ -207,11 +207,23 @@ export default class TwitterClient {
 
     public async getFriends():Promise<TwitterUserResponse[]>{
         try {
-            const params = {count: this.friendsCount};
-            const response = await this.client.get('friends/list',params);
-            console.log(response.users.length);
-
-            const users:TwitterUserResponse[] = response.users;
+            let params = {
+                count: this.friendsCount,
+                cursor:-1
+            };
+            let response = await this.client.get('friends/list',params);
+            let users:TwitterUserResponse[] = response.users;
+            while (response.next_cursor !== 0) {
+                const cursor:number = response.next_cursor;
+                params = {
+                    count: this.friendsCount,
+                    cursor:cursor,
+                };
+                response = await this.client.get('friends/list',params);
+                const tmpUsers:TwitterUserResponse[] = response.users;
+                users = [...users,...tmpUsers];
+            }
+            console.log(users.length);
 
             return users.map(user => {
                 return {
@@ -229,7 +241,6 @@ export default class TwitterClient {
                     created_at:user?.created_at,
                     profile_image_url_https:user?.profile_image_url_https,
                 };
-
             });
         }catch (e) {
             console.log(e);
