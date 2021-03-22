@@ -62,14 +62,16 @@ export class TweetController {
     }
   }
 
-  public async participatePrizeCompetition(request:TweetSearchTweetRequest):Promise<TweetResponse>{
+  public async participatePrizeCompetition(request:TweetSearchTweetRequest):Promise<TweetResponse[]>{
     try {
       console.log(request.query);
       const results = await this.tweetService.participatePrizeCompetition(request.query);
-      return {
-        id:0,
-        text:"",
-      }
+      return results.map(tweet => {
+        return {
+          id:tweet.getId(),
+          text:tweet.getText(),
+        }
+      });
     }catch (e) {
       throw e;
     }

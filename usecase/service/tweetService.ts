@@ -1,6 +1,7 @@
 import {Tweet} from '../../domain/tweet';
 import TweetClient from "../../infra/tweet/twitterClient";
 import {User} from "../../domain/user";
+import {Constants} from "../../constants/constants";
 
 export class TweetService {
     private tweetClient: TweetClient;
@@ -93,7 +94,9 @@ export class TweetService {
                 });
             }
 
-            const tweetResponses = await this.tweetClient.searchTweet(query);
+            // リツイート数が100以下は除く ユーザーがリツイートしているのは除く
+            const customQuery = query + " " + Constants.SEARCH_CONDITION_MIN_RETWEET + " " + Constants.SEARCH_CONDITION_EXCLUDE_RETWEETS;
+            const tweetResponses = await this.tweetClient.searchTweet(customQuery);
             const tweets = tweetResponses.map(tweet => {
                 const user = new User(
                     tweet.user?.id,tweet.user?.id_str,tweet.user?.name,tweet.user?.screen_name, tweet.user?.location,tweet.user?.url,

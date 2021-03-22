@@ -11,7 +11,7 @@
     "build": "tsc --build && cp -r ./config ./dist",
     "clean": "tsc --build --clean",
     "dev": "cross-env NODE_ENV=dev npm run ts-node app.ts",
-    "prod": "cross-env NODE_ENV=dev tsc && node ./dist/index.js"
+    "prod": "cross-env NODE_ENV=prod tsc && node ./dist/index.js"
   },
   "author": "",
   "license": "ISC",
