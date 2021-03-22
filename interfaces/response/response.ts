@@ -1,3 +1,6 @@
-import {TweetServiceResponse} from "../../usecase/service/tweetService";
+import {Tweet} from "../../domain/tweet";
 
-export type TweetResponse = TweetServiceResponse;
+export type TweetResponse = {
+    id:number,
+    text:string,
+};

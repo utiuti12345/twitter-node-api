@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc:ver": "tsc -v",
-    "tsc": "tsc && cp -r ./config ./dist",
+    "tsc": "tsc -p . && cp -r ./config ./dist",
     "ts-node": "ts-node",
+    "build": "tsc --build && cp -r ./config ./dist",
+    "clean": "tsc --build --clean",
     "dev": "cross-env NODE_ENV=dev npm run ts-node app.ts",
     "prod": "cross-env NODE_ENV=dev tsc && node ./dist/index.js"
   },

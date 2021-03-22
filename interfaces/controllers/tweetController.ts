@@ -11,7 +11,11 @@ export class TweetController {
   public async postReTweet(request:TweetReTweetRequest):Promise<TweetResponse>{
     try{
       console.log(request.id);
-      return await this.tweetService.postReTweet(request.id);
+      const retweet = await this.tweetService.postReTweet(request.id);
+      return {
+        id:retweet.getId(),
+        text:retweet.getText(),
+      }
     }catch(e){
       throw e;
     }
@@ -20,16 +24,27 @@ export class TweetController {
   public async postTweet(request:TweetTweetRequest):Promise<TweetResponse>{
     try{
       console.log(request.text);
-      return await this.tweetService.postTweet(request.text);
+      const tweet =  await this.tweetService.postTweet(request.text);
+      return {
+        id:tweet.getId(),
+        text:tweet.getText(),
+      }
     }catch(e){
       throw e;
     }
   }
 
-  public async searchTweet(request:TweetSearchTweetRequest):Promise<TweetResponse>{
+  public async searchTweet(request:TweetSearchTweetRequest):Promise<TweetResponse[]>{
     try{
       console.log(request.query);
-      return await this.tweetService.searchTweet(request.query);
+      const results = await this.tweetService.searchTweet(request.query);
+      const tweetResponse = results.map(result => {
+        return {
+          id:result.getId(),
+          text:result.getText(),
+        }
+      });
+      return tweetResponse;
     }catch(e){
       throw e;
     }
@@ -37,7 +52,11 @@ export class TweetController {
 
   public async getFriends():Promise<TweetResponse>{
     try {
-      return await this.tweetService.geyFriends();
+      const friends = await this.tweetService.geyFriends();
+      return {
+        id:0,
+        text:"",
+      }
     }catch (e) {
       throw e;
     }
@@ -46,7 +65,11 @@ export class TweetController {
   public async participatePrizeCompetition(request:TweetSearchTweetRequest):Promise<TweetResponse>{
     try {
       console.log(request.query);
-      return await this.tweetService.participatePrizeCompetition(request.query);
+      const results = await this.tweetService.participatePrizeCompetition(request.query);
+      return {
+        id:0,
+        text:"",
+      }
     }catch (e) {
       throw e;
     }
