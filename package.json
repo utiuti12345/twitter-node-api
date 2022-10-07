@@ -34,7 +34,7 @@
     "iconv-lite": "^0.6.2",
     "long": "^4.0.0",
     "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4",
+    "swagger-ui-express": "^4.5.0",
     "twitter": "^1.7.1"
   }
 }
